@@ -34,6 +34,7 @@ class ImageCare {
 		add_action('wp_ajax_imagecare_maxres',     array( $this, 'do_maxres'     ));
 		add_action('wp_ajax_imagecare_cleanregen', array( $this, 'do_cleanregen' ));
 		add_action('wp_ajax_imagecare_regensizes', array( $this, 'do_regensizes' ));
+		add_action('wp_ajax_imagecare_sanurl',     array( $this, 'do_sanurl'     ));
 	}
 
 	public function add_admin_menu() {
@@ -78,6 +79,10 @@ class ImageCare {
 
 	public function do_regensizes() {
 		include('inc-func-regensizes.php');
+	}
+
+	public function do_sanurl() {
+		include('inc-func-sanurl.php');
 	}
 
 	public function do_backup() {
