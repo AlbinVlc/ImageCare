@@ -2,37 +2,26 @@
 #imagecare-bar { position: relative; height:25px; margin: 12px 0px; border: 1px solid #0073AA; }
 #imagecare-bar-progress { position: absolute; top: 0%; left: 0%; width: 0%; height: 100%; background: lightgray; }
 #imagecare-bar-percent { position: absolute; top: 50%; left: 50%; width: 300px; height: 25px; margin-top: -9px; margin-left: -150px; font-weight: bold; text-align: center; }
-input[type=number] { width: 100px; }
 </style>
 <?php
 	$letsgo = !empty($_POST['letsgo']) ? (bool) $_POST['letsgo'] : false;
 
-	$lmt_w = get_option('imagecare_lmt_w', 1024);
-	$lmt_h = get_option('imagecare_lmt_h', 1024);
-
 	if(!$letsgo) {
 ?>
 <form method="post" action="">
-	<?php wp_nonce_field('imagecare', 'maxres') ?>
-	<p>Most users will upload images as they come from internet, their mobile phones or cameras, uploading heavy files with hight resolutions images that waste space and will never be used. Wordpress stores and preserve a long the time the original files just in case some day it has to scale them again but ... Do you really need so large images? Will not 1024x1024 be large enought? Let's crop them now.</p>
-	<p>Crop them at máximum of <input type="number" name="lmt_w" value="<?php echo $lmt_w ?>" /> x <input type="number" name="lmt_h" value="<?php echo $lmt_h ?>" /> pixels</p>
+	<?php wp_nonce_field('imagecare', 'sanurl') ?>
+	<p>Wordpress let the filenames have spaces and special characters (non ASCII) and that´s not a problem most of the times but maybe you want to be more carefull.</p>
 
-	<p><input type="submit" class="button hide-if-no-js" name="letsgo" value="<?php _e( 'Crop original images', 'maxres' ) ?>" /></p>
+	<p><input type="submit" class="button hide-if-no-js" name="letsgo" value="<?php _e( 'Sanitize URLs', 'sanurl' ) ?>" /></p>
 	<noscript><p><em><?php _e( 'You must enable Javascript in order to proceed!', 'imagecare' ) ?></em></p></noscript>
 </form>
 <?php
 	} else {
-		if($this->check_before_do('maxres')) {
-			$lmt_w = isset($_POST['lmt_w']) ? intval($_POST['lmt_w']) : $lmt_w;
-			$lmt_h = isset($_POST['lmt_h']) ? intval($_POST['lmt_h']) : $lmt_h;
-			if($lmt_w!=0 && $lmt_h!=0) {
-				update_option('imagecare_lmt_w', $lmt_w);
-				update_option('imagecare_lmt_h', $lmt_h);
-			}
-			$hr_ids = $this->getImageIDs(); // TODO get only the bigger ones
+		if($this->check_before_do('sanurl')) {
+			$hr_ids = $this->getImageIDs();
 			$count  = count($hr_ids);
-			$text_failures   = sprintf( __( 'All done! %1$s image(s) were successfully resized but there were %2$s failure(s).', 'imagecare' ), "'+rt_successes+'", "'+rt_errors+'" );
-			$text_nofailures = sprintf( __( 'All done! %1$s image(s) were successfully resized and there were 0 failures.', 'imagecare' ), "'+rt_successes+'" );
+			$text_failures   = sprintf( __( 'All done! %1$s image(s) were successfully sanitized but there were %2$s failure(s).', 'imagecare' ), "'+rt_successes+'", "'+rt_errors+'" );
+			$text_nofailures = sprintf( __( 'All done! %1$s image(s) were successfully sanitized and there were 0 failures.', 'imagecare' ), "'+rt_successes+'" );
 ?>
 	<div id="imagecare-bar">
 		<div id="imagecare-bar-progress"></div>
@@ -44,8 +33,8 @@ input[type=number] { width: 100px; }
 	<h3 class="title"><?php _e('Process information', 'imagecare') ?></h3>
 	<p>
 		<?php printf( __( 'Total images: %s', 'imagecare' ), $count ); ?><br />
-		<?php printf( __( 'Images resized: %s', 'imagecare' ), '<span id="imagecare-debug-successcount">0</span>' ); ?><br />
-		<?php printf( __( 'Resize failures: %s', 'imagecare' ), '<span id="imagecare-debug-failurecount">0</span>' ); ?>
+		<?php printf( __( 'Images sanitized: %s', 'imagecare' ), '<span id="imagecare-debug-successcount">0</span>' ); ?><br />
+		<?php printf( __( 'Sanitize failures: %s', 'imagecare' ), '<span id="imagecare-debug-failurecount">0</span>' ); ?>
 	</p>
 
 	<ol id="imagecare-debuglist"></ol>
@@ -115,7 +104,7 @@ input[type=number] { width: 100px; }
 				jQuery.ajax({
 					type: 'POST',
 					url: ajaxurl,
-					data: { 'action': 'imagecare_maxres', 'id': id },
+					data: { 'action': 'imagecare_sanurl', 'id': id },
 					success: function(response) {
 						if(response!==Object(response) || (typeof response.success==='undefined' && typeof response.error==='undefined')) {
 							response = new Object;
