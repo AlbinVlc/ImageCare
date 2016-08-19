@@ -46,6 +46,9 @@ An answer to that question.
 = 1.0 =
 * First usable version
 
+= 1.1 =
+* Added 'Sanitize URLs' functionality
+
 == Upgrade Notice ==
 
 No previouse versions.
