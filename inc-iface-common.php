@@ -11,6 +11,7 @@
 		$tabs['maxres']     = 'Top resolution';
 		$tabs['regensizes'] = 'Regenerate';
 		$tabs['cleanregen'] = 'Clean & Regen.';
+		$tabs['sanurl']     = 'Sanitize URLs';
 		$tabs['bup']        = 'Backup';
 		echo '<div id="icon-themes" class="icon32"><br></div>';
 		echo '<h2 class="nav-tab-wrapper">';
